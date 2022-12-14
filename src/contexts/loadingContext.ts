@@ -1,8 +1,15 @@
 import React from 'react';
 
-export const LoadingContext = React.createContext({
+type Props = {
+  isLoading: boolean;
+  setLoading: (loading: boolean) => void;
+  loadingMessage: string;
+  setLoadingMessage: (message: string) => void;
+};
+
+export const LoadingContext = React.createContext<Props>({
   isLoading: false,
-  setLoading: (loading: boolean) => {},
+  setLoading: (loading: boolean) => loading,
   loadingMessage: '',
-  setLoadingMessage: (message: string) => {}
+  setLoadingMessage: (message: string) => message,
 });
