@@ -1,7 +1,15 @@
 import React from 'react';
+import AppCanvas from '../components/AppCanvas';
 
 function Dashboard() {
-  return <div></div>;
+  return (
+    <AppCanvas>
+      <mesh>
+        <sphereGeometry />
+        <meshStandardMaterial color="hotpink" />
+      </mesh>
+    </AppCanvas>
+  );
 }
 
 export default Dashboard;

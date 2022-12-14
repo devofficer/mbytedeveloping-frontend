@@ -6,7 +6,7 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { DRAWER_WIDTH } from '../utils/constants';
 
-export const DrawerHeader = styled('div')(({ theme }) => ({
+const DrawerHeader = styled('div')(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
   padding: theme.spacing(0, 1),
@@ -16,9 +16,9 @@ export const DrawerHeader = styled('div')(({ theme }) => ({
 }));
 
 type DrawerProps = {
-  open: boolean,
-  onDrawerClose: () => void
-}
+  open: boolean;
+  onDrawerClose: () => void;
+};
 
 const Drawer: React.FC<DrawerProps> = ({ open, onDrawerClose }) => {
   const theme = useTheme();
@@ -39,7 +39,11 @@ const Drawer: React.FC<DrawerProps> = ({ open, onDrawerClose }) => {
     >
       <DrawerHeader>
         <IconButton onClick={onDrawerClose}>
-          {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+          {theme.direction === 'ltr' ? (
+            <ChevronLeftIcon />
+          ) : (
+            <ChevronRightIcon />
+          )}
         </IconButton>
       </DrawerHeader>
       <Divider />

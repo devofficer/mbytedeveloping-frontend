@@ -1,12 +1,21 @@
 import React from 'react';
-import Box from '@mui/material/Box';
 import AppBar from './AppBar';
 import MainContent from './MainContent';
-import Drawer, { DrawerHeader } from './Drawer';
+import Drawer from './Drawer';
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
 import { LoadingContext } from '../contexts/loadingContext';
-import { Theme, Typography } from '@mui/material';
+import { styled, Theme, Typography } from '@mui/material';
+
+const MainContainer = styled('div')({
+  display: 'flex',
+  height: '100vh',
+});
+
+const ContentContainer = styled('div')({
+  width: '100%',
+  height: '100%',
+});
 
 const MainLayout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   const [open, setOpen] = React.useState(false);
@@ -25,13 +34,12 @@ const MainLayout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
     <LoadingContext.Provider
       value={{ isLoading, setLoading, loadingMessage, setLoadingMessage }}
     >
-      <Box sx={{ display: 'flex' }}>
+      <MainContainer>
         <AppBar open={open} onDrawerOpen={handleDrawerOpen} />
         <Drawer open={open} onDrawerClose={handleDrawerClose} />
-        <MainContent open={open}>
-          <DrawerHeader />
-          {children}
-        </MainContent>
+        <ContentContainer>
+          <MainContent open={open}>{children}</MainContent>
+        </ContentContainer>
         <Backdrop
           sx={{
             color: '#fff',
@@ -42,7 +50,7 @@ const MainLayout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
           <CircularProgress color="inherit" />
           <Typography sx={{ ml: 1 }}>{loadingMessage}</Typography>
         </Backdrop>
-      </Box>
+      </MainContainer>
     </LoadingContext.Provider>
   );
 };
