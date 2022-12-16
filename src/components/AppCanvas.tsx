@@ -26,7 +26,6 @@ const AppCanvas: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
           zoom={0.6}
         />
         <directionalLight position={[10, 10, 10]} />
-        <perspectiveCamera />
         {children}
       </Canvas>
     </CanvasContainer>

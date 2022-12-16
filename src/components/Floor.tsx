@@ -1,8 +1,14 @@
 import * as THREE from 'three';
 import { useLoader } from '@react-three/fiber';
 import { useGLTF } from '@react-three/drei';
+import Water from './Water';
 
-const Floor = () => {
+type FloorProps = {
+  width: number;
+  height: number;
+};
+
+const Floor: React.FC<FloorProps> = ({ width, height }) => {
   const { scene } = useGLTF('assets/models/round_platform.glb');
   const texture = useLoader(
     THREE.TextureLoader,
@@ -23,7 +29,7 @@ const Floor = () => {
   return (
     <>
       <mesh rotation={[-Math.PI / 2, 0, 0]}>
-        <planeGeometry args={[64, 64, 1024, 1024]} />
+        <planeGeometry args={[width, height, 1024, 1024]} />
         <meshStandardMaterial
           attach="material"
           color="white"
@@ -32,6 +38,7 @@ const Floor = () => {
         />
       </mesh>
       <primitive object={scene} position={[0, 0.1, 0]} />
+      <Water width={64} height={64} />
     </>
   );
 };
