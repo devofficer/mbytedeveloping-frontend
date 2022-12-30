@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { useLoader } from '@react-three/fiber';
 import { useGLTF } from '@react-three/drei';
-import Water from './Water';
+import WaterRippleEffect from './WaterRippleEffect';
 
 type FloorProps = {
   width: number;
@@ -38,7 +38,7 @@ const Floor: React.FC<FloorProps> = ({ width, height }) => {
         />
       </mesh>
       <primitive object={scene} position={[0, 0.1, 0]} />
-      <Water width={64} height={64} />
+      <WaterRippleEffect width={64} height={64} />
     </>
   );
 };

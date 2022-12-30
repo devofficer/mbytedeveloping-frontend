@@ -1,6 +1,6 @@
 import React from 'react';
 import AppCanvas from '../components/AppCanvas';
-import Floor from '../components/Floor';
+import Floor from '../components/Floor/Floor';
 import Loader from '../components/Loader';
 
 function Dashboard() {

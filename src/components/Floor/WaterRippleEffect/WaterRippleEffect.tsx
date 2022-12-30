@@ -4,12 +4,15 @@ import * as THREE from 'three';
 import rainVertexShader from './shaders/rainVertexShader';
 import rippleFragmentShader from './shaders/rippleFragmentShader';
 
-type WaterProps = {
+type WaterRippleEffectProps = {
   width: number;
   height: number;
 };
 
-const Water: React.FC<WaterProps> = ({ width, height }) => {
+const WaterRippleEffect: React.FC<WaterRippleEffectProps> = ({
+  width,
+  height,
+}) => {
   const mesh = useRef<THREE.Mesh | null>(null);
   const { scene } = useThree();
 
@@ -53,4 +56,4 @@ const Water: React.FC<WaterProps> = ({ width, height }) => {
   );
 };
 
-export default Water;
+export default WaterRippleEffect;
