@@ -27,6 +27,9 @@ const WaterRippleEffect: React.FC<WaterRippleEffectProps> = ({
       uEnvironmentTexture: {
         value: scene.background,
       },
+      uNoise: {
+        value: (200 * (width + height)) / 128,
+      },
     }),
     [scene],
   );

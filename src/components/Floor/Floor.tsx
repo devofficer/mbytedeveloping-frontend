@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { useLoader } from '@react-three/fiber';
 import { useGLTF } from '@react-three/drei';
 import WaterRippleEffect from './WaterRippleEffect';
+import RainDropEffect from './RainDropEffect';
 
 type FloorProps = {
   width: number;
@@ -14,9 +15,10 @@ const Floor: React.FC<FloorProps> = ({ width, height }) => {
     THREE.TextureLoader,
     'assets/textures/floor/floor.png',
   );
+  const repeatTxt = (8 * width) / 64;
   texture.wrapS = THREE.RepeatWrapping;
   texture.wrapT = THREE.RepeatWrapping;
-  texture.repeat.set(8, 8);
+  texture.repeat.set(repeatTxt, repeatTxt);
 
   const normals = useLoader(
     THREE.TextureLoader,
@@ -24,7 +26,7 @@ const Floor: React.FC<FloorProps> = ({ width, height }) => {
   );
   normals.wrapS = THREE.RepeatWrapping;
   normals.wrapT = THREE.RepeatWrapping;
-  normals.repeat.set(8, 8);
+  normals.repeat.set(repeatTxt, repeatTxt);
 
   return (
     <>
@@ -38,7 +40,8 @@ const Floor: React.FC<FloorProps> = ({ width, height }) => {
         />
       </mesh>
       <primitive object={scene} position={[0, 0.1, 0]} />
-      <WaterRippleEffect width={64} height={64} />
+      <WaterRippleEffect width={width} height={height} />
+      <RainDropEffect width={width} height={height} />
     </>
   );
 };

@@ -2,6 +2,7 @@ const rippleFragmentShader = `
 uniform samplerCube uEnvironmentTexture;
 uniform float uTime;
 uniform vec3 uEyePosition;
+uniform float uNoise;
 
 varying vec2 vUV;
 varying vec3 vPosition;
@@ -43,7 +44,7 @@ float noise(in vec2 x) {
 void main(void) {
   vec3 rayDir = normalize(vPosition - uEyePosition);
 
-  float f = noise(200.0 * vUV);
+  float f = noise(uNoise * vUV);
   vec3 normal = normalize(vec3(dFdx(f), 0.0, dFdy(f)) + 0.2);
   normal = normalize(normal * 0.9 + rayDir);
   vec4 ref = texture(uEnvironmentTexture, reflect(normal, rayDir));

@@ -7,7 +7,7 @@ function Dashboard() {
   return (
     <AppCanvas>
       <React.Suspense fallback={<Loader />}>
-        <Floor width={64} height={64} />
+        <Floor width={16} height={16} />
       </React.Suspense>
     </AppCanvas>
   );
