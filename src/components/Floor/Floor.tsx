@@ -41,7 +41,7 @@ const Floor: React.FC<FloorProps> = ({ width, height }) => {
       </mesh>
       <primitive object={scene} position={[0, 0.1, 0]} />
       <WaterRippleEffect width={width} height={height} />
-      <RainDropEffect width={width} height={height} />
+      <RainDropEffect width={width} height={height} altitude={15} />
     </>
   );
 };
