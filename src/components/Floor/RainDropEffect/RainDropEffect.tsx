@@ -12,7 +12,7 @@ const RainDropEffect: React.FC<RainDropEffectProps> = ({ width, height }) => {
   const dropTexture = useLoader(TextureLoader, 'assets/textures/rain/drop.png');
   const drops = useMemo(
     () =>
-      Array.from({ length: width * height * 10 }).map(() => ({
+      Array.from({ length: width * height * 15 }).map(() => ({
         position: new Vector3(
           Math.random() * width - width / 2,
           Math.random() * 15,
