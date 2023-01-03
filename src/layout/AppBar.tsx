@@ -44,7 +44,7 @@ const AppBar: React.FC<AppBarProps> = ({ open, onDrawerOpen }) => (
         <MenuIcon />
       </IconButton>
       <Typography variant="h6" noWrap component="div">
-        AppBar
+        Mbytedeveloping Test Assessment
       </Typography>
     </Toolbar>
   </StyledAppBar>

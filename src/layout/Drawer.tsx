@@ -2,6 +2,12 @@ import { styled, useTheme } from '@mui/material/styles';
 import MuiDrawer from '@mui/material/Drawer';
 import IconButton from '@mui/material/IconButton';
 import Divider from '@mui/material/Divider';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemButton from '@mui/material/ListItemButton';
+import ViewInArIcon from '@mui/icons-material/ViewInAr';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { DRAWER_WIDTH } from '../utils/constants';
@@ -47,6 +53,18 @@ const Drawer: React.FC<DrawerProps> = ({ open, onDrawerClose }) => {
         </IconButton>
       </DrawerHeader>
       <Divider />
+      <List>
+        {['Model1', 'Model2', 'Model3', 'Model4'].map((text) => (
+          <ListItem key={text} disablePadding>
+            <ListItemButton>
+              <ListItemIcon sx={{ minWidth: 32 }}>
+                <ViewInArIcon />
+              </ListItemIcon>
+              <ListItemText primary={text} />
+            </ListItemButton>
+          </ListItem>
+        ))}
+      </List>
     </MuiDrawer>
   );
 };

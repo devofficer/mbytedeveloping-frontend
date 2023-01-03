@@ -18,7 +18,7 @@ const ContentContainer = styled('div')({
 });
 
 const MainLayout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(true);
   const [isLoading, setLoading] = React.useState(false);
   const [loadingMessage, setLoadingMessage] = React.useState('');
 
