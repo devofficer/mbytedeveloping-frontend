@@ -1,4 +1,4 @@
-import axios, { AxiosResponse } from 'axios';
+import axios from 'axios';
 import { PROXY_URL } from '../config';
 
 const axiosService = axios.create({

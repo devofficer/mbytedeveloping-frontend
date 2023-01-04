@@ -1,8 +1,11 @@
+import React, { useContext } from 'react';
 import * as THREE from 'three';
 import { useLoader } from '@react-three/fiber';
 import { useGLTF } from '@react-three/drei';
 import WaterRippleEffect from './WaterRippleEffect';
 import RainDropEffect from './RainDropEffect';
+import ModelContext from '../../contexts/modelContext';
+import ModelViewer from './ModelViewer';
 
 type FloorProps = {
   width: number;
@@ -10,6 +13,12 @@ type FloorProps = {
 };
 
 const Floor: React.FC<FloorProps> = ({ width, height }) => {
+  const { activeModel, models } = useContext(ModelContext);
+  const model = React.useMemo(
+    () => models.find((m) => m.id === activeModel),
+    [activeModel],
+  );
+
   const { scene } = useGLTF('assets/models/round_platform.glb');
   const texture = useLoader(
     THREE.TextureLoader,
@@ -42,6 +51,7 @@ const Floor: React.FC<FloorProps> = ({ width, height }) => {
       <primitive object={scene} position={[0, 0.1, 0]} />
       <WaterRippleEffect width={width} height={height} />
       <RainDropEffect width={width} height={height} altitude={15} />
+      {model && <ModelViewer model={model} />}
     </>
   );
 };
