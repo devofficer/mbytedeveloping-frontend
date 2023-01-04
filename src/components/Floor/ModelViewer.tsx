@@ -9,7 +9,7 @@ const ModelViewer: React.FC<ModelViewerProps> = ({ model }) => {
   const { scene } = useGLTF(model.url);
 
   return (
-    <mesh>
+    <mesh position={[0, 0.25, 0]} scale={0.8}>
       <primitive object={scene} />
     </mesh>
   );
