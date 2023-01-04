@@ -25,6 +25,7 @@ const AppCanvas: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
           fov={60}
           zoom={0.6}
         />
+        <fog attach="fog" color="#aaaaaa" near={1} far={15} />
         <directionalLight position={[10, 10, 10]} intensity={0.7} />
         {children}
       </Canvas>
