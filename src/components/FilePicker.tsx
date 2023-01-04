@@ -29,16 +29,23 @@ type FilePickerProps = {
   files: File[];
 };
 
-const FilePicker: React.FC<FilePickerProps> = ({ files, onChange }) => {
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({
-    onDrop: onChange,
-  });
+const FilePicker: React.FC<FilePickerProps> = ({ onChange }) => {
+  const { getRootProps, getInputProps, isDragActive, acceptedFiles } =
+    useDropzone({
+      onDrop: onChange,
+      multiple: false,
+      accept: {
+        'model/gltf-binary': ['.glb'],
+      },
+    });
 
   return (
     <Dropzone {...getRootProps()}>
       <input {...getInputProps()} />
       <FileUploadIcon />
-      {isDragActive ? (
+      {acceptedFiles.length ? (
+        acceptedFiles[0].name
+      ) : isDragActive ? (
         <p>Drop the files here ...</p>
       ) : (
         <DndArea>

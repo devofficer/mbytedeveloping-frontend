@@ -55,6 +55,10 @@ const ControlPanel: React.FC = () => {
   );
 
   const handleUpload = useCallback(async () => {
+    if (!files.length) {
+      return;
+    }
+
     const { data: model } = await createModel({
       name: modelName,
       file: files[0],
