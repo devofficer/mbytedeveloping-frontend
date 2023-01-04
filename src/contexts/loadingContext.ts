@@ -13,3 +13,5 @@ export const LoadingContext = React.createContext<Props>({
   loadingMessage: '',
   setLoadingMessage: (message: string) => message,
 });
+
+export default LoadingContext;

@@ -1,3 +1,4 @@
+import React, { useContext } from 'react';
 import { styled, useTheme } from '@mui/material/styles';
 import MuiDrawer from '@mui/material/Drawer';
 import IconButton from '@mui/material/IconButton';
@@ -11,6 +12,7 @@ import ViewInArIcon from '@mui/icons-material/ViewInAr';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { DRAWER_WIDTH } from '../utils/constants';
+import ModelContext from '../contexts/modelContext';
 
 const DrawerHeader = styled('div')(({ theme }) => ({
   display: 'flex',
@@ -28,6 +30,11 @@ type DrawerProps = {
 
 const Drawer: React.FC<DrawerProps> = ({ open, onDrawerClose }) => {
   const theme = useTheme();
+  const { models, activeModel, setActiveModel } = useContext(ModelContext);
+
+  const handleSelectModel = (modelId: string) => {
+    setActiveModel(modelId);
+  };
 
   return (
     <MuiDrawer
@@ -54,13 +61,16 @@ const Drawer: React.FC<DrawerProps> = ({ open, onDrawerClose }) => {
       </DrawerHeader>
       <Divider />
       <List>
-        {['Model1', 'Model2', 'Model3', 'Model4'].map((text) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
+        {models.map(({ id, name }) => (
+          <ListItem key={id} disablePadding>
+            <ListItemButton
+              onClick={() => handleSelectModel(id)}
+              selected={id === activeModel}
+            >
               <ListItemIcon sx={{ minWidth: 32 }}>
                 <ViewInArIcon />
               </ListItemIcon>
-              <ListItemText primary={text} />
+              <ListItemText primary={name} />
             </ListItemButton>
           </ListItem>
         ))}
