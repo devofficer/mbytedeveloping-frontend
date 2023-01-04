@@ -67,12 +67,7 @@ const RainDropEffect: React.FC<RainDropEffectProps> = ({
             itemSize={3}
           />
         </bufferGeometry>
-        <pointsMaterial
-          color="#aaaaaa"
-          size={0.1}
-          transparent={true}
-          map={dropTexture}
-        />
+        <pointsMaterial size={0.1} transparent={true} map={dropTexture} />
       </points>
     </mesh>
   );

@@ -9,17 +9,28 @@ import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import FileUploadIcon from '@mui/icons-material/FileUpload';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 import FilePicker from '../components/FilePicker';
 import ModelContext from '../contexts/modelContext';
-import { createModel, getModels } from '../services/modelService';
+import {
+  createModel,
+  deleteModel,
+  getModels,
+  updateModel,
+} from '../services/modelService';
 
 const ControlPanel: React.FC = () => {
-  const [open, setOpen] = useState(false);
+  const [uploadOpen, setUploadOpen] = useState(false);
+  const [editOpen, setEditOpen] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
   const [files, setFiles] = useState<Array<File>>([]);
   const [modelName, setModelName] = useState<string>('sample model');
-  const { models, setModels, setActiveModel } = useContext(ModelContext);
+  const { activeModel, models, setModels, setActiveModel } =
+    useContext(ModelContext);
 
   useEffect(() => {
     (async () => {
@@ -36,14 +47,6 @@ const ControlPanel: React.FC = () => {
     setFiles(acceptedFiles);
   }, []);
 
-  const handleClose = useCallback(() => {
-    setOpen(false);
-  }, []);
-
-  const handleOpen = useCallback(() => {
-    setOpen(true);
-  }, []);
-
   const handleModelName = useCallback(
     (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
       setModelName(e.target.value);
@@ -58,11 +61,45 @@ const ControlPanel: React.FC = () => {
     });
     setModels([...models, model]);
     setActiveModel(model.id);
+    setUploadOpen(false);
   }, [modelName, files, models]);
+
+  const handleEditOpen = useCallback(() => {
+    const model = models.find((m) => m.id === activeModel);
+    if (model) {
+      setModelName(model.name);
+      setEditOpen(true);
+    }
+  }, [models, activeModel]);
+
+  const handleEdit = useCallback(async () => {
+    const payload = { name: modelName };
+    await updateModel(activeModel, payload);
+    setModels(
+      models.map((m) => (m.id === activeModel ? { ...m, ...payload } : m)),
+    );
+    setEditOpen(false);
+  }, [models, activeModel, modelName]);
+
+  const handleDelete = useCallback(async () => {
+    await deleteModel(activeModel);
+    const updatedModels = models.filter((m) => m.id !== activeModel);
+    setModels(updatedModels);
+    if (updatedModels.length) {
+      setActiveModel(updatedModels[0].id);
+    } else {
+      setActiveModel('');
+    }
+    setDeleteOpen(false);
+  }, [models, activeModel]);
 
   return (
     <>
-      <Dialog open={open} onClose={handleClose} maxWidth="xs">
+      <Dialog
+        open={uploadOpen}
+        onClose={() => setUploadOpen(false)}
+        maxWidth="xs"
+      >
         <DialogTitle>Upload Model</DialogTitle>
         <DialogContent>
           <Grid container spacing={2}>
@@ -81,9 +118,50 @@ const ControlPanel: React.FC = () => {
           </Grid>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
+          <Button onClick={() => setUploadOpen(false)}>Cancel</Button>
           <Button onClick={handleUpload} autoFocus variant="contained">
             Upload
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog open={editOpen} onClose={() => setEditOpen(false)} maxWidth="xs">
+        <DialogTitle>Edit Model</DialogTitle>
+        <DialogContent>
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <TextField
+                label="Model Name"
+                variant="standard"
+                fullWidth
+                value={modelName}
+                onChange={handleModelName}
+              />
+            </Grid>
+          </Grid>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setEditOpen(false)}>Cancel</Button>
+          <Button onClick={handleEdit} autoFocus variant="contained">
+            Update
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog open={deleteOpen} onClose={() => setDeleteOpen(false)}>
+        <DialogTitle>Delete Model Confirmation</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Do you really want to delete this model permently?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setDeleteOpen(false)}>Cancel</Button>
+          <Button
+            onClick={handleDelete}
+            autoFocus
+            color="error"
+            variant="contained"
+          >
+            Delete
           </Button>
         </DialogActions>
       </Dialog>
@@ -95,10 +173,40 @@ const ControlPanel: React.FC = () => {
             padding: 2,
             width: '64px',
             height: '64px',
+            mr: 2,
           }}
-          onClick={handleOpen}
+          onClick={() => setUploadOpen(true)}
         >
           <FileUploadIcon fontSize="large" />
+        </Button>
+        <Button
+          disabled={!activeModel}
+          variant="contained"
+          color="success"
+          sx={{
+            borderRadius: '50%',
+            padding: 2,
+            width: '64px',
+            height: '64px',
+            mr: 2,
+          }}
+          onClick={handleEditOpen}
+        >
+          <EditIcon fontSize="large" />
+        </Button>
+        <Button
+          disabled={!activeModel}
+          variant="contained"
+          color="error"
+          sx={{
+            borderRadius: '50%',
+            padding: 2,
+            width: '64px',
+            height: '64px',
+          }}
+          onClick={() => setDeleteOpen(true)}
+        >
+          <DeleteIcon fontSize="large" />
         </Button>
       </Box>
     </>
