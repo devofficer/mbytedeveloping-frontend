@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useEffect, useContext } from 'react';
 import AppCanvas from '../components/AppCanvas';
 import Floor from '../components/Floor/Floor';
 import Loader from '../components/Loader';
@@ -12,27 +12,28 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import FileUploadIcon from '@mui/icons-material/FileUpload';
 import FilePicker from '../components/FilePicker';
+import ModelContext from '../contexts/modelContext';
+import { createModel, getModels } from '../services/modelService';
 
 const ControlPanel: React.FC = () => {
   const [open, setOpen] = useState(false);
   const [files, setFiles] = useState<Array<File>>([]);
   const [modelName, setModelName] = useState<string>('sample model');
+  const { models, setModels, setActiveModel } = useContext(ModelContext);
+
+  useEffect(() => {
+    (async () => {
+      const { data: models } = await getModels();
+      setModels(models);
+
+      if (models.length) {
+        setActiveModel(models[0].id);
+      }
+    })();
+  }, []);
 
   const handleFiles = useCallback((acceptedFiles: File[]) => {
     setFiles(acceptedFiles);
-
-    acceptedFiles.forEach((file) => {
-      const reader = new FileReader();
-
-      reader.onabort = () => console.log('file reading was aborted');
-      reader.onerror = () => console.log('file reading has failed');
-      reader.onload = () => {
-        // Do whatever you want with the file contents
-        const binaryStr = reader.result;
-        console.log(binaryStr);
-      };
-      reader.readAsArrayBuffer(file);
-    });
   }, []);
 
   const handleClose = useCallback(() => {
@@ -50,10 +51,19 @@ const ControlPanel: React.FC = () => {
     [],
   );
 
+  const handleUpload = useCallback(async () => {
+    const { data: model } = await createModel({
+      name: modelName,
+      file: files[0],
+    });
+    setModels([...models, model]);
+    setActiveModel(model.id);
+  }, [modelName, files, models]);
+
   return (
     <>
       <Dialog open={open} onClose={handleClose} maxWidth="xs">
-        <DialogTitle id="alert-dialog-title">Upload Model</DialogTitle>
+        <DialogTitle>Upload Model</DialogTitle>
         <DialogContent>
           <Grid container spacing={2}>
             <Grid item xs={12}>
@@ -72,7 +82,7 @@ const ControlPanel: React.FC = () => {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleClose} autoFocus variant="contained">
+          <Button onClick={handleUpload} autoFocus variant="contained">
             Upload
           </Button>
         </DialogActions>

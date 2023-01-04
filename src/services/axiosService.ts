@@ -5,8 +5,4 @@ const axiosService = axios.create({
   baseURL: PROXY_URL,
 });
 
-axiosService.interceptors.response.use((res: AxiosResponse<any, any>) => {
-  return res.data;
-});
-
 export default axiosService;
