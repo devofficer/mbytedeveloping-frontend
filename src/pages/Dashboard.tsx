@@ -22,6 +22,7 @@ import {
   getModels,
   updateModel,
 } from '../services/modelService';
+import LoadingContext from '../contexts/loadingContext';
 
 const ControlPanel: React.FC = () => {
   const [uploadOpen, setUploadOpen] = useState(false);
@@ -31,6 +32,7 @@ const ControlPanel: React.FC = () => {
   const [modelName, setModelName] = useState<string>('sample model');
   const { activeModel, models, setModels, setActiveModel } =
     useContext(ModelContext);
+  const { setLoading } = useContext(LoadingContext);
 
   useEffect(() => {
     (async () => {
@@ -58,14 +60,15 @@ const ControlPanel: React.FC = () => {
     if (!files.length) {
       return;
     }
-
+    setLoading(true);
+    setUploadOpen(false);
     const { data: model } = await createModel({
       name: modelName,
       file: files[0],
     });
     setModels([...models, model]);
     setActiveModel(model.id);
-    setUploadOpen(false);
+    setLoading(false);
   }, [modelName, files, models]);
 
   const handleEditOpen = useCallback(() => {
@@ -77,15 +80,19 @@ const ControlPanel: React.FC = () => {
   }, [models, activeModel]);
 
   const handleEdit = useCallback(async () => {
+    setLoading(true);
+    setEditOpen(false);
     const payload = { name: modelName };
     await updateModel(activeModel, payload);
     setModels(
       models.map((m) => (m.id === activeModel ? { ...m, ...payload } : m)),
     );
-    setEditOpen(false);
+    setLoading(false);
   }, [models, activeModel, modelName]);
 
   const handleDelete = useCallback(async () => {
+    setLoading(true);
+    setDeleteOpen(false);
     await deleteModel(activeModel);
     const updatedModels = models.filter((m) => m.id !== activeModel);
     setModels(updatedModels);
@@ -94,7 +101,7 @@ const ControlPanel: React.FC = () => {
     } else {
       setActiveModel('');
     }
-    setDeleteOpen(false);
+    setLoading(false);
   }, [models, activeModel]);
 
   return (
